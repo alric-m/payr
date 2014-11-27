@@ -50,10 +50,15 @@ class Payr::BillsController < ApplicationController
   end
 
   protected
-  def change_status id, status, error=nil
-    @bill = Payr::Bill.find(id)
-    @bill.update_attribute(:state, status)
-    @bill.update_attribute(:error_code, error) unless error.nil?
-  end
+    def change_status id, status, error=nil
+      @bill = Payr::Bill.find(id)
+      @bill.update_attribute(:state, status)
+      @bill.update_attribute(:error_code, error) unless error.nil?
+    end
+
+  private
+    def bill_params
+      params.require(:bill).permit(:amount, :article_id, :buyer_id, :state, :bill_reference)
+    end
 
 end
